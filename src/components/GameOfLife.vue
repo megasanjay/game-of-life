@@ -1,17 +1,11 @@
 <template>
   <div class="w-screen h-screen">
-    <!-- <span class="text-black"> {{ width }} {{ height }} </span> -->
     <canvas
       ref="canvas"
-      class="bg-white"
+      class="bg-white canvas"
       :width="width"
       :height="height"
     ></canvas>
-    <!-- <div class="flex flex-col">
-      <span v-for="(row, index) in grid" :key="index" class="flex">
-        <span v-for="(column, index) in row" :key="index">{{ column }}</span>
-      </span>
-    </div> -->
   </div>
 </template>
 
@@ -25,7 +19,10 @@ export default {
       width: window.innerWidth,
       height: window.innerHeight,
       grid: [],
-      cellSize: 20,
+      cellSize: 30,
+      path: null,
+      scope: null,
+      canvasId: "canvas-one",
     };
   },
   methods: {
@@ -39,21 +36,21 @@ export default {
           } else {
             this.ctx.fillStyle = "white";
           }
-          this.ctx.fillRect(
-            row * this.cellSize,
-            column * this.cellSize,
-            this.cellSize - 2,
-            this.cellSize - 2
-          );
-          this.ctx.stroke();
-          // this.ctx.arc(
-          //   row * this.cellSize + this.cellSize / 2,
-          //   column * this.cellSize + this.cellSize / 2,
-          //   this.cellSize / 4,
-          //   0,
-          //   2 * Math.PI
+          // this.ctx.fillRect(
+          //   row * this.cellSize,
+          //   column * this.cellSize,
+          //   this.cellSize,
+          //   this.cellSize
           // );
-          // this.ctx.fill();
+          // this.ctx.stroke();
+          this.ctx.arc(
+            row * this.cellSize + this.cellSize / 2,
+            column * this.cellSize + this.cellSize / 2,
+            this.cellSize / 4,
+            0,
+            2 * Math.PI
+          );
+          this.ctx.fill();
         }
       }
     },
@@ -160,8 +157,6 @@ export default {
     init() {
       this.canvas = this.$refs.canvas;
       this.ctx = this.canvas.getContext("2d");
-      this.width = this.canvas.width;
-      this.height = this.canvas.height;
 
       for (let i = 0; i < this.width / this.cellSize; i++) {
         this.grid[i] = [];
@@ -169,17 +164,17 @@ export default {
           this.grid[i][j] = Math.floor(Math.random() * 2);
         }
       }
-
       this.draw();
-
-      setInterval(async () => {
-        await this.update();
-        this.draw();
-      }, 100);
     },
   },
-  mounted() {
+  async mounted() {
     this.init();
+
+    setInterval(async () => {
+      await this.update();
+
+      this.draw();
+    }, 250);
   },
 };
 </script>
