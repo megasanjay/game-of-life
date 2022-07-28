@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "gsap": "^3.9.1",
-    "vue": "^3.2.25"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.2.0",
